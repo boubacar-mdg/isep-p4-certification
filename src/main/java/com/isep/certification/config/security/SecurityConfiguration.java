@@ -100,7 +100,7 @@ public class SecurityConfiguration {
                                                 .authenticated())
                                 .cors(cors -> {
 
-                                        String corsAlowedOrigins = "http://localhost:4200,http://localhost:3000,http://localhost:5173,https://lokaasenegal.com,http://localhost:4173,http://localhost:81,http://lokaasenegal.com";
+                                        String corsAlowedOrigins = "http://localhost:4200,http://localhost:3000,http://localhost:5173,http://localhost:5174,http://localhost:4173,http://localhost:81";
 
                                         CorsConfiguration configuration = new CorsConfiguration();
                                         configuration.setAllowedOrigins(Arrays.asList(corsAlowedOrigins.split(",")));
