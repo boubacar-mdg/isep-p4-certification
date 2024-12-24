@@ -32,24 +32,14 @@ public class SmsServiceImpl implements SmsService {
     public void sendSmsMessage(Sms sms) {
         log.info("Sending "+sms.getSmsType()+" SMS to " + sms.getUserNumber()+ " on "+ LocalDateTime.now());
          RestTemplate restTemplate = new RestTemplate();
-        /*String url = "https://lampush-tls.lafricamobile.com/api?accountid={id}&password={password}&text={text}&sender={sender}&to={to}";
-        Map<String, String> params = new HashMap<>();
-        params.put("id", "FAYIZI");
-        params.put("password", "Qp5xuVEi59X5f76Z");
-        params.put("text", sms.getBody());
-        params.put("sender", "LAVANDE");
-        params.put("to", "221"+sms.getUserNumber());
-        restTemplate.getForObject(url, String.class, params); */
-        
-
         // Create authentication header
         HttpHeaders headers = new HttpHeaders();
-        headers.setBasicAuth("ras_tech", "raSooL845");
+        headers.setBasicAuth("", "");
 
         // Create query parameters
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("destAddr", sms.getUserNumber());
-        params.add("sourceAddr", "NUGO");
+        params.add("sourceAddr", "EXPRESSO");
         params.add("message", sms.getBody());
 
         // Create HTTP entity with headers and parameters
