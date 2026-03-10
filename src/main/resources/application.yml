@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3309/isep
+    url: jdbc:mysql://lavande-spotter-mysql-sndbpf:3306/isep
     username: root
     password: spotter1
     driver-class-name: com.mysql.cj.jdbc.Driver
