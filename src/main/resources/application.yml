@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/isep
+    url: jdbc:mysql://localhost:3309/isep
     username: root
-    password: 
+    password: spotter1
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 10
@@ -32,7 +32,6 @@ application:
     jwt:
       secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
       expiration: 18144000000 # 30 days
-      refresh-token: 
+      refresh-token:
         expiration: 604800000 # 7 days
   mode: dev
-  
