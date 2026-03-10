@@ -29,6 +29,8 @@ public class ApplicationResponseStatusExceptionResolver extends ResponseEntityEx
 		String reason = e.getReason();
 		LoginMode loginMode = e.getLoginMode();
 
+		log.error("Exception: " + e.getMessage());
+
 		return loginMode == null
 				? new ResponseEntity<Response<?>>(Response.build((HttpStatus) e.getStatusCode(), e.getType(), reason),
 						(HttpStatus) e.getStatusCode())
@@ -41,6 +43,7 @@ public class ApplicationResponseStatusExceptionResolver extends ResponseEntityEx
 	@ResponseBody
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Response<?>> handleGlobalException(Exception e) {
+		log.error("Exception: " + e.getMessage());
 		return new ResponseEntity<Response<?>>(
 				Response.build(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur est survenue"),
 				HttpStatus.INTERNAL_SERVER_ERROR);
@@ -49,6 +52,7 @@ public class ApplicationResponseStatusExceptionResolver extends ResponseEntityEx
 	@ResponseBody
 	@ExceptionHandler(MalformedJwtException.class)
 	public ResponseEntity<Response<?>> handleGlobalException(MalformedJwtException e) {
+		log.error("Exception: " + e.getMessage());
 		return new ResponseEntity<Response<?>>(
 				Response.build(HttpStatus.FORBIDDEN, "Accès non autorisé"),
 				HttpStatus.FORBIDDEN);
@@ -57,6 +61,7 @@ public class ApplicationResponseStatusExceptionResolver extends ResponseEntityEx
 	@ResponseBody
 	@ExceptionHandler(ExpiredJwtException.class)
 	public ResponseEntity<Response<?>> handleGlobalException(ExpiredJwtException e) {
+		log.error("Exception: " + e.getMessage());
 		return new ResponseEntity<Response<?>>(
 				Response.build(HttpStatus.UNAUTHORIZED, "Session expirée"),
 				HttpStatus.UNAUTHORIZED);
@@ -65,6 +70,7 @@ public class ApplicationResponseStatusExceptionResolver extends ResponseEntityEx
 	@ResponseBody
 	@ExceptionHandler(UnsupportedJwtException.class)
 	public ResponseEntity<Response<?>> handleGlobalException(UnsupportedJwtException e) {
+		log.error("Exception: " + e.getMessage());
 		return new ResponseEntity<Response<?>>(
 				Response.build(HttpStatus.UNAUTHORIZED, "Session expirée"),
 				HttpStatus.UNAUTHORIZED);
@@ -73,6 +79,7 @@ public class ApplicationResponseStatusExceptionResolver extends ResponseEntityEx
 	@ResponseBody
 	@ExceptionHandler(SignatureException.class)
 	public ResponseEntity<Response<?>> handleGlobalException(SignatureException e) {
+		log.error("Exception: " + e.getMessage());
 		return new ResponseEntity<Response<?>>(
 				Response.build(HttpStatus.UNAUTHORIZED, "Signature de session invalide"),
 				HttpStatus.UNAUTHORIZED);
