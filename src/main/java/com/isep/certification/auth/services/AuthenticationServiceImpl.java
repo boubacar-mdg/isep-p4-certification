@@ -70,8 +70,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     if (request.getFirstName() == null
         || request.getFirstName() == null
         || request.getPhoneNumber() == null || request.getPassword() == null || request.getCountryCode() == null
-        || request.getFirstName().equals("") || request.getFirstName().equals("") || request.getPhoneNumber().equals("")
-        || request.getPassword().equals("") || request.getCountryCode().equals("")) {
+        || request.getFirstName().equalsIgnoreCase("") || request.getFirstName().equalsIgnoreCase("")
+        || request.getPhoneNumber().equalsIgnoreCase("")
+        || request.getPassword().equalsIgnoreCase("") || request.getCountryCode().equalsIgnoreCase("")) {
       throw new AuthException(AuthErrors.EMPTY_FIELDS);
     }
 
@@ -79,14 +80,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     if (Tools.validatePhoneNumber(request.getPhoneNumber(), country.getPhoneNumberRegexValidator()) == false)
       throw new AuthException(AuthErrors.INVALID_PHONE_NUMBER);
-  
+
     String finalPhoneNumber = country.getTelephoneCode() + request.getPhoneNumber().replace(" ", "");
 
     Optional<User> queryUser = repository.findByPhoneNumber(finalPhoneNumber);
 
     if (queryUser.isPresent())
       throw new AuthException(AuthErrors.USER_ALREADY_EXISTS);
-  
 
     String verificationStep = systemParameterService.getParameterValueByCode("REGISTRATION_VERIFICATION_STEP", "n");
     UserSubscription userSubscription = userSubscriptionRepository.findByPrice(0L)
@@ -102,7 +102,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         .country(country)
         .createAt(LocalDateTime.now())
         .subscription(userSubscription)
-        .accountState(verificationStep.equals("y") ? AccountState.INACTIVE : AccountState.ACTIVE)
+        .accountState(verificationStep.equalsIgnoreCase("y") ? AccountState.INACTIVE : AccountState.ACTIVE)
         .build();
 
     User savedUser = repository.save(user);
@@ -122,11 +122,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
         .accessToken(jwtToken)
         .refreshToken(refreshToken)
-        .nextTransition(verificationStep.equals("y") ? "account/activation" : "dashboard/orders")
+        .nextTransition(verificationStep.equalsIgnoreCase("y") ? "account/activation" : "dashboard/orders")
         .user(userResponse)
         .build();
 
-    if (verificationStep.equals("y")) {
+    if (verificationStep.equalsIgnoreCase("y")) {
       Long verificationId = verificationService.createVerificationRequest(user.getId(), VerificationType.REGISTRATION);
       authenticationResponse.setVerificationId(verificationId);
     }
@@ -138,9 +138,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
 
     if (request.getPhoneNumber() == null || request.getPassword() == null || request.getCountryCode() == null
-        || request.getPhoneNumber().equals("")
-        || request.getPassword().equals("")
-        || request.getCountryCode().equals("")) {
+        || request.getPhoneNumber().equalsIgnoreCase("")
+        || request.getPassword().equalsIgnoreCase("")
+        || request.getCountryCode().equalsIgnoreCase("")) {
       throw new AuthException(AuthErrors.EMPTY_FIELDS);
     }
 
@@ -177,7 +177,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
           .nextTransition(user.getAccountState() == AccountState.ACTIVE ? "dashboard/orders" : "account/activation")
           .user(userResponse).build();
 
-      if (user.getAccountState() == AccountState.INACTIVE && verificationStep.equals("y")) {
+      if (user.getAccountState() == AccountState.INACTIVE && verificationStep.equalsIgnoreCase("y")) {
         Long verificationId = verificationService.createVerificationRequest(user.getId(),
             VerificationType.REGISTRATION);
         loggedInUserInformations.setVerificationId(verificationId);
